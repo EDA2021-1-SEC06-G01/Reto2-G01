@@ -1,3 +1,6 @@
+# Integrantes
+* Req. 2 - Helena Vegalara Correa 201823328 h.vegalara@uniandes.edu.co
+* Req. 3 - Juan Esteban Rodriguez 202011178 j.rodriguez26@uniandes.edu.co
 #ISIS1225 - Librerias de soporte
 
 Este proyecto contiene los Tipos abstractos de datos, estructuras de datos y algoritmos requeridos por el curso ISIS1225-Estructuras de Datos y Algoritmos
