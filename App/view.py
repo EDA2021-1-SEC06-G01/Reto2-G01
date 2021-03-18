@@ -21,8 +21,9 @@
  """
 
 import config as cf
-import sys
+import sys 
 import controller
+from DISClib.ADT import map as mp
 from DISClib.ADT import list as lt
 assert cf
 
@@ -120,7 +121,6 @@ while True:
 
         resultado = controller.videos_tendencia_por_pais(catalog,categoria,pais,int(numero))
         printvideostendenciaporciudad(resultado)
-=======
         
     elif int(inputs[0]) == 4:
         categoria = input("Elija categoría del video ")
