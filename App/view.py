@@ -36,10 +36,10 @@ operación solicitada
 """
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- Encontrar buenos videos por categoría y país")
-    print("3- Encontrar video tendencia por país")
-    print("4- Encontrar video tendencia por categoría")
+    print("0- Cargar información en el catálogo")
+    print("1- Encontrar buenos videos por visitas")
+    print("3- Encontrar video tendencia por categoria")
+    print("4- Encontrar video tendencia por pais")
     print("5- Buscar los videos con más likes")
 
 def initCatalog(estructuraDeDatos):
@@ -115,19 +115,16 @@ while True:
         print('Para la muestra de ', numeroDeElementos, ' elementos, el tiempo (mseg) es: ', str(resultado[0]))
         printBuenosVideos(resultado[1])
     elif int(inputs[0]) == 3:
-        categoria = input("categoria de los videos: ")
-        pais = input("ciudad del los videos en tendencia:")
-        numero = int(input("numero de datos"))
-
-        resultado = controller.videos_tendencia_por_pais(catalog,categoria,pais,int(numero))
-        printvideostendenciaporciudad(resultado)
+        label = input("categoria a buscar: ")
+        books = controller.videosTendenciaPorcategoria(catalog, label)
+        print(books)
         
     elif int(inputs[0]) == 4:
-        categoria = input("Elija categoría del video ")
-        resultado = controller.videosTendenciaPorCategoria(catalog, categoria)
-        printVideoTendenciaPorCategoria(resultado)
+        categoria = input("pais a consultar ")
+        resultado = controller.videosTendenciaPorpais(catalog, categoria)
+        print(resultado)
+        #printVideoTendenciaPorpais(resultado)
 
 
     else:
         sys.exit(0)
-sys.exit(0)
