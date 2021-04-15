@@ -43,7 +43,7 @@ assert cf
 def newCatalog(estructuraDeDatos):
     catalog = {'videos': None,
                'categories': None,
-               'country':None,
+               'country': None,
                'likes':None}
     
     catalog['videos'] = lt.newList(estructuraDeDatos,
@@ -51,7 +51,8 @@ def newCatalog(estructuraDeDatos):
     catalog['categories'] = mp.newMap(10000,
                                       maptype= 'CHAINING',
                                       loadfactor= 4.0,
-                                      comparefunction=compareMapCategories)
+                                      comparefunction=compareBookIds)
+    
     catalog['country'] = lt.newList(estructuraDeDatos)
     catalog['likes'] = lt.newList(estructuraDeDatos)
     return catalog
@@ -64,6 +65,7 @@ def addCategory(catalog, elem):
 
 def addVideo(catalog, elem):
     lt.addLast(catalog['videos'],elem)
+
 
 # Funciones para creacion de datos
 def newCategory(id):
@@ -78,6 +80,7 @@ def newVideo(title, id):
     return video
 
 
+
 # Funciones de consulta
 
 
@@ -88,9 +91,26 @@ def cmpVideosByViews(video1, video2):
         return True
     else:
         return False
+def compareMapBookIds(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if (int(id) == int(identry)):
+        return 0
+    elif (int(id) > int(identry)):
+        return 1
+    else:
+        return -1
+def compareBookIds(id1, id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
 
-def compareMapCategories(category1, category2):
-    pass
 
 
 
@@ -114,22 +134,41 @@ def mejoresVideosPorViews(catalog, numeroDeElementos, algoritmo):
     return elapsed_time_mseg, sorted_list
 
 
-def videostendenciaporpais(catalog, categorias, pais,numero):
+def videostendenciaporpais(catalog, country):
+    """
+    retorna una fraccion de la lista de videos del año ordenada por rating
+    """
+    # TODO: ordenamiento utilizando TAD maps y list
+    # recuperar libros en el año apropiado
+    ranked_list = None
+    year_mp = mp.get(catalog['country'],country )
 
-    sub_list = lt.subList(catalog['videos'], 1, (numero+1))
-    sub_list = sub_list.copy()
-    sorted_list = sa.sort(sub_list,cmpVideosByViews)
-    for i in sorted_list['country']:
-        paises = lt.getElement(sorted_list['country'], i)
-        lt.addFirst(sorted_list,paises)
-    return sorted_list 
+    if year_mp:
+        # recuperar la lista de libros
+        books_year = me.getValue(year_mp)["videos"]
 
-def videosporcategoria(catalog, tagname):
+        # ajustar la muestra segun la fraccion de elementos en la lista
+        total_books = lt.size(books_year)
+        sample = int(total_books*fraction)
+        print("Total de libros en " + str(year) + ": " + str(total_books))
+        print("Muestra de libros: " + str(sample))
+
+        # ordenando la sublista
+        sub_list = lt.subList(books_year, 1, sample)
+        sorted_list = sa.sort(sub_list, cmpVideosByViews)
+        ranked_list = lt.subList(sorted_list, 1, rank)
+
+    return ranked_list
+   
+    
+
+   
+def videosporcategoria(catalog, categori):
     """
     Retornar la lista de libros asociados a un tag
     """
-    tag = mp.get(catalog['categories'], tagname)
-    books = None
+    cat = mp.get(catalog['categories'], categori)
+    videos = None
     if tag:
-        books = me.getValue(tag)['videos']
-    return books
+        videos = me.getValue(cat)
+    return videos
